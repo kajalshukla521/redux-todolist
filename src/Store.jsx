@@ -1,6 +1,6 @@
 // src/Store.jsx
 import { createStore } from 'redux';
-import todosReducer from './Store/reducers/TodosReducer'; 
+import todosReducer from './Redux/reducers/TodosReducer'; 
 const store = createStore(
   todosReducer,
 );
