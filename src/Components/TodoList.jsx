@@ -1,7 +1,7 @@
-
+// src/components/TodoList.jsx
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTodo, removeTodo, toggleTodo, updateTodo } from '../Store/actions/ActionTypes';
+import { addTodo, removeTodo, toggleTodo, updateTodo } from '../Store/actions/TodoActions';
 
 const TodoList = () => {
   const [todoText, setTodoText] = useState('');

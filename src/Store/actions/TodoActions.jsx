@@ -1,5 +1,5 @@
 // src/actions/todoActions.js
-import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO } from '../actions/ActionTypes';
+import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO } from './ActionTypes';
 
 export const addTodo = (todo) => ({
   type: ADD_TODO,
