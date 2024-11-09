@@ -21,6 +21,7 @@ const TodoList = () => {
         <h1 className="text-3xl font-bold text-center mb-6">Todo List</h1>
 
         <div className="mb-6">
+       
           <input
             type="text"
             value={todoText}

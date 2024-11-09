@@ -8,7 +8,7 @@ import TodoList from './Components/TodoList';
 const App = () => (
   <Provider store={store}>
     <div>
-      <h1>Todo List</h1>
+      
       <TodoList />
     </div>
   </Provider>
