@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTodo, removeTodo, toggleTodo, updateTodo } from '../Redux/actions/TodoActions';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,13 +10,34 @@ const TodoList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTodoId, setCurrentTodoId] = useState(null);
   const [updatedText, setUpdatedText] = useState('');
-
+  
   const todos = useSelector((state) => state.todos);
   const dispatch = useDispatch();
 
+
+
+
+  // Load todos from localStorage when the component mounts 1
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem('todos'));
+    if (savedTodos) {
+      savedTodos.forEach((todo) => dispatch(addTodo(todo)));
+    }
+  }, [dispatch]);
+
+
+
+
+  // Save data to  localStorage whenever the todos state changes2
+  useEffect(() => {
+    if (todos.length > 0) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
+
   const handleAddTodo = () => {
     if (todoText.trim()) {
-      const newTodo = { id: Date.now(), text: todoText };
+      const newTodo = { id: Date.now(), text: todoText, completed: false };
       dispatch(addTodo(newTodo));
       setTodoText('');
       toast.success('Todo added successfully!');
@@ -25,12 +46,18 @@ const TodoList = () => {
     }
   };
 
+
+
+
   // Open Modal for Update
   const handleOpenModal = (todo) => {
     setIsModalOpen(true);
     setCurrentTodoId(todo.id);
     setUpdatedText(todo.text);
   };
+
+
+
 
   // Save Updated Todo
   const handleSaveUpdate = () => {
@@ -43,6 +70,9 @@ const TodoList = () => {
     }
   };
 
+
+
+
   // Delete Todo
   const handleDeleteTodo = (id) => {
     const isConfirmed = window.confirm('Are you sure you want to delete this item?');
@@ -52,6 +82,7 @@ const TodoList = () => {
     }
   };
 
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-black text-white">
       <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg">
