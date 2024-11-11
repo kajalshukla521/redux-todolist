@@ -1,4 +1,4 @@
-// src/Store/reducers/todosReducer.js
+//todosReducer.js
 import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO } from '../actions/ActionTypes';
 
 const initialState = {

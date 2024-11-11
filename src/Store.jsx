@@ -1,4 +1,4 @@
-// src/Store.jsx
+// /Store.jsx
 import { createStore } from 'redux';
 import todosReducer from './Redux/reducers/TodosReducer'; 
 const store = createStore(
@@ -6,3 +6,6 @@ const store = createStore(
 );
 
 export default store;
+
+
+

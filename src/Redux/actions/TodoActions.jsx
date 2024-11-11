@@ -1,4 +1,4 @@
-// src/actions/todoActions.js
+//todoActions.js
 import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO } from './ActionTypes';
 
 export const addTodo = (todo) => ({

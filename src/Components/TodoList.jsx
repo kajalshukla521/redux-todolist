@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTodo, removeTodo, toggleTodo, updateTodo } from '../Redux/actions/TodoActions';
+import { ToastContainer, toast } from 'react-toastify';
+import Modal from './Modal';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TodoList = () => {
   const [todoText, setTodoText] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTodoId, setCurrentTodoId] = useState(null);
+  const [updatedText, setUpdatedText] = useState('');
+
   const todos = useSelector((state) => state.todos);
   const dispatch = useDispatch();
 
@@ -12,6 +19,36 @@ const TodoList = () => {
       const newTodo = { id: Date.now(), text: todoText };
       dispatch(addTodo(newTodo));
       setTodoText('');
+      toast.success('Todo added successfully!');
+    } else {
+      toast.error('Please enter a valid todo!');
+    }
+  };
+
+  // Open Modal for Update
+  const handleOpenModal = (todo) => {
+    setIsModalOpen(true);
+    setCurrentTodoId(todo.id);
+    setUpdatedText(todo.text);
+  };
+
+  // Save Updated Todo
+  const handleSaveUpdate = () => {
+    if (updatedText.trim()) {
+      dispatch(updateTodo(currentTodoId, updatedText));
+      setIsModalOpen(false);
+      toast.success('Todo updated successfully!');
+    } else {
+      toast.error('Please enter a valid update!');
+    }
+  };
+
+  // Delete Todo
+  const handleDeleteTodo = (id) => {
+    const isConfirmed = window.confirm('Are you sure you want to delete this item?');
+    if (isConfirmed) {
+      dispatch(removeTodo(id));
+      toast.info('Todo deleted successfully!');
     }
   };
 
@@ -21,7 +58,6 @@ const TodoList = () => {
         <h1 className="text-3xl font-bold text-center mb-6">Todo List</h1>
 
         <div className="mb-6">
-       
           <input
             type="text"
             value={todoText}
@@ -54,13 +90,13 @@ const TodoList = () => {
                   Toggle
                 </button>
                 <button
-                  onClick={() => dispatch(updateTodo(todo.id, 'Updated Text'))}
+                  onClick={() => handleOpenModal(todo)}
                   className="px-4 py-2 text-sm text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none"
                 >
                   Update
                 </button>
                 <button
-                  onClick={() => dispatch(removeTodo(todo.id))}
+                  onClick={() => handleDeleteTodo(todo.id)}
                   className="px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none"
                 >
                   Remove
@@ -70,6 +106,17 @@ const TodoList = () => {
           ))}
         </div>
       </div>
+
+      {/* Modal for Updating Todo */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveUpdate}
+        value={updatedText}
+        onChange={(e) => setUpdatedText(e.target.value)}
+      />
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
