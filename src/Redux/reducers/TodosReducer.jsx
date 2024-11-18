@@ -6,10 +6,15 @@ const initialState = {
 };
 
 const todosReducer = (state = initialState, action) => {
+  //control statement 
   switch (action.type) {
     case ADD_TODO:
-      return {
+      return {   //its return new state
+
+        //spread operator
+        
         ...state,
+        //heare update todo arrray                   // it is new todo items 
         todos: [...state.todos, { ...action.payload, completed: false }],
       };
     case REMOVE_TODO:
