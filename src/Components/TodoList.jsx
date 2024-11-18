@@ -114,10 +114,19 @@ const TodoList = () => {
   };
 
 //clear all data 
-  const handleClearAll = () => {
-    dispatch(clearAllTodos());
-    localStorage.setItem('todos', JSON.stringify([])); 
-  };
+const handleClearAll = () => {
+  const isConfirmed = window.confirm("Are you sure you want to delete all records?");
+
+  if (isConfirmed) {
+    dispatch(clearAllTodos()); 
+    localStorage.removeItem("todos"); 
+    toast.info("All todos deleted!");
+  } else {
+    
+    toast.info("Delete action cancelled!");
+  }
+};
+
   
 
 
