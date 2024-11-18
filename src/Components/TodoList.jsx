@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTodo, removeTodo, toggleTodo, updateTodo } from '../Redux/actions/TodoActions';
+import { addTodo, removeTodo, toggleTodo, updateTodo, clearAllTodos } from '../Redux/actions/TodoActions';
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from './Modal';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,15 +9,24 @@ import { RxUpdate } from "react-icons/rx";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdClear } from "react-icons/md";
 
+
+
+
 const TodoList = () => {
   const [todoText, setTodoText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isClearAllModalOpen, setIsClearAllModalOpen] = useState(false); 
   const [currentTodoId, setCurrentTodoId] = useState(null);
   const [updatedText, setUpdatedText] = useState('');
-  const todos = useSelector((state) => state.todos);
+
+
+
+  const todos = useSelector((state) => state.todos || []);
   const dispatch = useDispatch();
+
+
+
+
 
   // Load todos from localStorage on component mount
   useEffect(() => {
@@ -31,19 +40,28 @@ const TodoList = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+
+
+
+
+
   // Add Todo and handle the case for text length
   const handleAddTodo = () => {
-    if (todoText.trim() && todoText.length <= 30) {
+    if (todoText.trim() && todoText.length <= 20) {
       const newTodo = { id: Date.now(), text: todoText, completed: false };
       dispatch(addTodo(newTodo));
       setTodoText('');
       toast.success('Todo added successfully!');
-    } else if (todoText.length > 30) {
-      toast.error('Todo text should be 30 characters or less!');
+    } else if (todoText.length > 20) {
+      toast.error('Todo text should be 20 characters or less!');
     } else {
       toast.error('Please enter a valid todo!');
     }
   };
+
+
+
+
 
   // Handle Enter key press for adding todo
   const handleKeyPress = (e) => {
@@ -52,12 +70,18 @@ const TodoList = () => {
     }
   };
 
+
+
+
   // Open modal to update todo
   const handleOpenModal = (todo) => {
     setIsModalOpen(true);
     setCurrentTodoId(todo.id);
     setUpdatedText(todo.text);
   };
+
+
+
 
   // Save updated todo
   const handleSaveUpdate = () => {
@@ -70,11 +94,15 @@ const TodoList = () => {
     }
   };
 
+
+
+
   // Open delete confirmation modal
   const handleOpenDeleteModal = (id) => {
     setCurrentTodoId(id);
     setIsDeleteModalOpen(true);
   };
+
 
   // Confirm delete action
   const handleConfirmDelete = () => {
@@ -85,39 +113,34 @@ const TodoList = () => {
     setIsDeleteModalOpen(false);
   };
 
-  // Open the Clear All confirmation modal
-  const handleOpenClearAllModal = () => {
-    setIsClearAllModalOpen(true);
-  };
-
-  // Confirm Clear All
+//clear all data 
   const handleClearAll = () => {
-    dispatch({ type: 'CLEAR_ALL_TODOS' }); // Dispatch action to clear all todos
-    localStorage.setItem('todos', JSON.stringify([])); // Clear from localStorage
-    setIsClearAllModalOpen(false);
-    toast.info('All tasks have been cleared!');
+    dispatch(clearAllTodos());
+    localStorage.setItem('todos', JSON.stringify([])); 
   };
+  
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-600 to-blue-500 text-white px-4">
       <div className="w-full max-w-md p-6 sm:p-8 bg-gray-800 rounded-2xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-semibold">Todo List</h1>
-          
-          {/* Clear All Button */}
+
           <button
-            onClick={handleOpenClearAllModal}
+            onClick={handleClearAll}
             className="p-3 text-white bg-red-500 rounded-full hover:bg-red-600 focus:outline-none transition-all"
           >
-            <MdClear  size={20} />
+            <MdClear size={20} />
           </button>
+
         </div>
 
         <div className="mb-6">
           <input
             type="text"
             value={todoText}
-            maxLength={30}
+            maxLength={20}
             onChange={(e) => setTodoText(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Add a new todo"
@@ -189,7 +212,7 @@ const TodoList = () => {
         onDeleteConfirm={handleConfirmDelete}
       />
 
-     
+
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>

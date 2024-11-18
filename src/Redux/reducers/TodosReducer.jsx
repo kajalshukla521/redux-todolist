@@ -1,5 +1,5 @@
 //todosReducer.js
-import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO } from '../actions/ActionTypes';
+import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, UPDATE_TODO,CLEAR_ALL_TODO } from '../actions/ActionTypes';
 
 const initialState = {
   todos: [],
@@ -36,6 +36,11 @@ const todosReducer = (state = initialState, action) => {
           todo.id === action.payload.id ? { ...todo, text: action.payload.updatedText } : todo
         ),
       };
+
+
+
+      case CLEAR_ALL_TODO:
+      return []; // Clear all todos
     default:
       return state;
   }
